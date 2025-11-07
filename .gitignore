@@ -127,3 +127,36 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# MLflow
+mlruns/
+mlflow-artifacts/
+
+# Model files
+*.pkl
+*.joblib
+*.h5
+*.pt
+*.pth
+*.onnx
+*.pb
+
+# Data files
+data/
+*.csv
+*.parquet
+*.feather
+
+# Docker
+.docker/
+
+# OS
+Thumbs.db
