@@ -1,0 +1,65 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ensemble-1d
+  labels:
+    app: ensemble-1d
+    version: v1.0.0
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: ensemble-1d
+  template:
+    metadata:
+      labels:
+        app: ensemble-1d
+        version: v1.0.0
+    spec:
+      containers:
+      - name: ensemble-1d
+        image: ensemble-1d:latest
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 8501
+          name: streamlit
+          protocol: TCP
+        - containerPort: 8000
+          name: api
+          protocol: TCP
+        env:
+        - name: PYTHONUNBUFFERED
+          value: "1"
+        - name: MLFLOW_TRACKING_URI
+          value: "http://mlflow-service:5000"
+        resources:
+          requests:
+            memory: "2Gi"
+            cpu: "1000m"
+          limits:
+            memory: "4Gi"
+            cpu: "2000m"
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 8501
+          initialDelaySeconds: 30
+          periodSeconds: 10
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 8501
+          initialDelaySeconds: 10
+          periodSeconds: 5
+        volumeMounts:
+        - name: models
+          mountPath: /app/models
+        - name: data
+          mountPath: /app/data
+      volumes:
+      - name: models
+        persistentVolumeClaim:
+          claimName: ensemble-models-pvc
+      - name: data
+        persistentVolumeClaim:
+          claimName: ensemble-data-pvc

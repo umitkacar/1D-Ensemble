@@ -1,0 +1,107 @@
+version: '3.8'
+
+services:
+  # 🚀 Main Application
+  ensemble-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: ensemble-1d-app
+    ports:
+      - "8501:8501"  # Streamlit
+      - "8000:8000"  # FastAPI
+    volumes:
+      - ./data:/app/data
+      - ./models:/app/models
+      - ./logs:/app/logs
+    environment:
+      - PYTHONUNBUFFERED=1
+      - MLFLOW_TRACKING_URI=http://mlflow:5000
+    networks:
+      - ensemble-network
+    depends_on:
+      - mlflow
+      - postgres
+    restart: unless-stopped
+
+  # 📊 MLflow Tracking Server
+  mlflow:
+    image: python:3.11-slim
+    container_name: ensemble-mlflow
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./mlruns:/mlruns
+      - ./mlflow-artifacts:/mlflow-artifacts
+    environment:
+      - BACKEND_STORE_URI=postgresql://mlflow:mlflow@postgres:5432/mlflow
+      - ARTIFACT_ROOT=/mlflow-artifacts
+    networks:
+      - ensemble-network
+    command: >
+      bash -c "
+        pip install mlflow psycopg2-binary &&
+        mlflow server
+          --backend-store-uri postgresql://mlflow:mlflow@postgres:5432/mlflow
+          --default-artifact-root /mlflow-artifacts
+          --host 0.0.0.0
+          --port 5000
+      "
+    restart: unless-stopped
+
+  # 🗄️ PostgreSQL Database
+  postgres:
+    image: postgres:15-alpine
+    container_name: ensemble-postgres
+    environment:
+      - POSTGRES_USER=mlflow
+      - POSTGRES_PASSWORD=mlflow
+      - POSTGRES_DB=mlflow
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    networks:
+      - ensemble-network
+    restart: unless-stopped
+
+  # 📈 Jupyter Lab
+  jupyter:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: ensemble-jupyter
+    ports:
+      - "8888:8888"
+    volumes:
+      - ./notebooks:/app/notebooks
+      - ./data:/app/data
+    environment:
+      - JUPYTER_ENABLE_LAB=yes
+    networks:
+      - ensemble-network
+    command: >
+      bash -c "
+        pip install jupyterlab &&
+        jupyter lab --ip=0.0.0.0 --port=8888 --no-browser --allow-root
+      "
+    restart: unless-stopped
+
+  # 📊 TensorBoard
+  tensorboard:
+    image: tensorflow/tensorflow:latest
+    container_name: ensemble-tensorboard
+    ports:
+      - "6006:6006"
+    volumes:
+      - ./logs:/logs
+    networks:
+      - ensemble-network
+    command: tensorboard --logdir=/logs --host=0.0.0.0
+    restart: unless-stopped
+
+volumes:
+  postgres-data:
+  mlflow-artifacts:
+
+networks:
+  ensemble-network:
+    driver: bridge
