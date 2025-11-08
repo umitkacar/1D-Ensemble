@@ -1,9 +1,15 @@
 """Ensemble model combining multiple base models."""
 
-from typing import Any, Dict, List, Literal
+import sys
+from typing import Any, Dict, List, Optional
 
 import numpy as np
 from sklearn.metrics import accuracy_score, f1_score, precision_score, recall_score
+
+if sys.version_info >= (3, 8):
+    from typing import Literal
+else:
+    from typing_extensions import Literal
 
 from ensemble_1d.models.base import BaseModel
 
@@ -32,7 +38,7 @@ class EnsembleModel:
         self,
         models: List[BaseModel],
         fusion_method: Literal["voting", "weighted", "average"] = "voting",
-        weights: List[float] = None,
+        weights: Optional[List[float]] = None,
     ) -> None:
         """Initialize ensemble model."""
         self.models = models

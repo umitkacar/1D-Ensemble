@@ -32,10 +32,12 @@ setup(
         "torch>=2.0.0",
         "xgboost>=2.0.0",
         "scikit-learn>=1.3.0",
-        "numpy>=1.24.0",
+        "numpy>=1.24.0,<2.0.0",
         "pandas>=2.0.0",
         "matplotlib>=3.7.0",
         "tqdm>=4.66.0",
+        "joblib>=1.3.0",
+        "typing-extensions>=4.0.0;python_version<'3.10'",
     ],
     extras_require={
         "dev": [
