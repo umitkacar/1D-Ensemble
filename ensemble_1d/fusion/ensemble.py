@@ -6,6 +6,7 @@ from typing import Any, Dict, List, Optional
 import numpy as np
 from sklearn.metrics import accuracy_score, f1_score, precision_score, recall_score
 
+
 if sys.version_info >= (3, 8):
     from typing import Literal
 else:
@@ -78,10 +79,9 @@ class EnsembleModel:
         """
         if self.fusion_method == "voting":
             return self._voting_predict(X)
-        elif self.fusion_method in ["weighted", "average"]:
+        if self.fusion_method in ["weighted", "average"]:
             return self._weighted_predict(X)
-        else:
-            raise ValueError(f"Unknown fusion method: {self.fusion_method}")
+        raise ValueError(f"Unknown fusion method: {self.fusion_method}")
 
     def _voting_predict(self, X: np.ndarray) -> np.ndarray:
         """Hard voting prediction.
@@ -95,7 +95,7 @@ class EnsembleModel:
         predictions = np.array([model.predict(X) for model in self.models])
         # Majority voting
         voted_predictions = np.apply_along_axis(
-            lambda x: np.bincount(x).argmax(), axis=0, arr=predictions
+            lambda x: np.bincount(x).argmax(), axis=0, arr=predictions,
         )
         return voted_predictions
 

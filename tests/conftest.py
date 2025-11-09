@@ -1,6 +1,5 @@
 """Pytest configuration and fixtures."""
 
-import numpy as np
 import pytest
 from sklearn.datasets import make_classification
 
@@ -37,7 +36,7 @@ def binary_data():
         tuple: (X, y)
     """
     X, y = make_classification(
-        n_samples=100, n_features=5, n_informative=3, n_classes=2, random_state=42
+        n_samples=100, n_features=5, n_informative=3, n_classes=2, random_state=42,
     )
     return X, y
 

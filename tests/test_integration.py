@@ -50,9 +50,7 @@ class TestEndToEnd:
         ]
 
         weights = [0.4, 0.3, 0.3]
-        ensemble = EnsembleModel(
-            models=models, fusion_method="weighted", weights=weights
-        )
+        ensemble = EnsembleModel(models=models, fusion_method="weighted", weights=weights)
 
         ensemble.fit(X_train, y_train)
         metrics = ensemble.evaluate(X_test, y_test)

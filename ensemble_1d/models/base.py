@@ -1,7 +1,7 @@
 """Base model class for all ensemble models."""
 
 from abc import ABC, abstractmethod
-from typing import Any, Dict, Optional, Tuple
+from typing import Any, Dict, Optional
 
 import numpy as np
 from sklearn.metrics import accuracy_score, f1_score, precision_score, recall_score
@@ -37,7 +37,6 @@ class BaseModel(ABC):
         Returns:
             Self for method chaining.
         """
-        pass
 
     @abstractmethod
     def predict(self, X: np.ndarray) -> np.ndarray:
@@ -49,7 +48,6 @@ class BaseModel(ABC):
         Returns:
             Predictions of shape (n_samples,).
         """
-        pass
 
     @abstractmethod
     def predict_proba(self, X: np.ndarray) -> np.ndarray:
@@ -61,7 +59,6 @@ class BaseModel(ABC):
         Returns:
             Class probabilities of shape (n_samples, n_classes).
         """
-        pass
 
     def evaluate(self, X: np.ndarray, y: np.ndarray) -> Dict[str, float]:
         """Evaluate model performance.

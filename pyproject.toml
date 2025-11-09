@@ -316,6 +316,9 @@ ignore = [
     "W191",    # indentation contains tabs
     "ANN101",  # missing type annotation for self
     "ANN102",  # missing type annotation for cls
+    "ANN201",  # missing return type annotation
+    "ANN202",  # missing return type annotation for private function
+    "ANN001",  # missing type annotation for function argument
     "ANN401",  # dynamically typed expressions (Any)
     "S101",    # use of assert
     "PLR0913", # too many arguments
@@ -323,6 +326,11 @@ ignore = [
     "TD002",   # missing TODO author
     "TD003",   # missing TODO link
     "FIX002",  # line contains TODO
+    "TRY003",  # raise vanilla args
+    "EM101",   # raw string in exception
+    "EM102",   # f-string in exception
+    "N803",    # invalid argument name (X, y are standard in ML)
+    "N806",    # non-lowercase variable in function (X, y standard)
 ]
 
 # Allow fix for all enabled rules (when `--fix` is provided)
@@ -333,14 +341,17 @@ unfixable = []
 dummy-variable-rgx = "^(_+|(_+[a-zA-Z0-9_]*[a-zA-Z0-9]+?))$"
 
 [tool.ruff.lint.per-file-ignores]
-"__init__.py" = ["F401", "E402"]
+"__init__.py" = ["F401", "E402", "PLC0415"]  # Lazy imports are intentional
 "tests/**/*.py" = [
     "S101",    # assert allowed in tests
     "ARG",     # unused function args in tests
     "FBT",     # boolean trap allowed in tests
     "PLR2004", # magic values allowed in tests
     "S311",    # pseudo-random allowed in tests
+    "T201",    # print allowed in tests
 ]
+"test_package.py" = ["T201", "INP001"]  # print allowed, not a package
+"examples/**/*.py" = ["T201", "INP001"]  # print allowed in examples
 
 [tool.ruff.lint.isort]
 known-first-party = ["ensemble_1d"]

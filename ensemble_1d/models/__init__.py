@@ -3,9 +3,9 @@
 # Lazy imports to avoid requiring all dependencies
 __all__ = [
     "BaseModel",
-    "XGBoostModel",
     "PyTorchModel",
     "RandomForestModel",
+    "XGBoostModel",
 ]
 
 

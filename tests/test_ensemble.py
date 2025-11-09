@@ -53,9 +53,7 @@ class TestEnsembleModel:
             RandomForestModel(n_estimators=10),
         ]
         weights = [0.6, 0.4]
-        ensemble = EnsembleModel(
-            models=models, fusion_method="weighted", weights=weights
-        )
+        ensemble = EnsembleModel(models=models, fusion_method="weighted", weights=weights)
         ensemble.fit(X_train, y_train)
 
         predictions = ensemble.predict(X_test)

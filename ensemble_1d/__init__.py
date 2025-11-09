@@ -22,10 +22,10 @@ __license__ = "MIT"
 # Lazy imports to avoid heavy dependencies on package import
 __all__ = [
     "BaseModel",
-    "XGBoostModel",
+    "EnsembleModel",
     "PyTorchModel",
     "RandomForestModel",
-    "EnsembleModel",
+    "XGBoostModel",
     "__version__",
 ]
 
