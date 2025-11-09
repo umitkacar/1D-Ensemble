@@ -4,8 +4,7 @@ from typing import Any, Optional
 
 import numpy as np
 import torch
-import torch.nn as nn
-import torch.optim as optim
+from torch import nn, optim
 from torch.utils.data import DataLoader, TensorDataset
 
 from ensemble_1d.models.base import BaseModel
@@ -126,9 +125,7 @@ class PyTorchModel(BaseModel):
         X_tensor = torch.FloatTensor(X).to(self.device)
         y_tensor = torch.LongTensor(y).to(self.device)
         dataset = TensorDataset(X_tensor, y_tensor)
-        dataloader = DataLoader(
-            dataset, batch_size=self.params["batch_size"], shuffle=True
-        )
+        dataloader = DataLoader(dataset, batch_size=self.params["batch_size"], shuffle=True)
 
         # Training setup
         criterion = nn.CrossEntropyLoss()

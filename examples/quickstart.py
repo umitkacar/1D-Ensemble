@@ -5,7 +5,6 @@
 This example demonstrates the basic usage of the 1D-Ensemble framework.
 """
 
-import numpy as np
 from sklearn.datasets import make_classification
 from sklearn.model_selection import train_test_split
 
@@ -29,9 +28,7 @@ def main() -> None:
     )
 
     # Split data
-    X_train, X_test, y_train, y_test = train_test_split(
-        X, y, test_size=0.2, random_state=42
-    )
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
     print(f"Train size: {X_train.shape[0]}, Test size: {X_test.shape[0]}")
 
     # Initialize models
